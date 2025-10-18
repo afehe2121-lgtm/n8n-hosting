@@ -14,7 +14,7 @@ RUN mkdir -p /home/node/.n8n && chown -R node:node /home/node/.n8n
 
 USER node
 
-# المنفذ الافتراضي
+# المنفذ  الافتراضي
 EXPOSE 5678
 
 # تشغيل n8n باستخدام tini
