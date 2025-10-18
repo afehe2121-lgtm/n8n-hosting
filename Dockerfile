@@ -1,13 +1,22 @@
+# استخدم صورة n8n الرسمية
 FROM n8nio/n8n:latest
 
-# Set working directory inside the container
-WORKDIR /data
+# تثبيت tini يدويًا
+USER root
+RUN apt-get update && apt-get install -y tini && apt-get clean
 
-# Copy repository files into the container (keeps any workflows / custom files)
-COPY . /data
+# إعداد المنطقة الزمنية
+ENV GENERIC_TIMEZONE=Asia/Riyadh
+ENV TZ=Asia/Riyadh
 
-# Expose the port n8n uses
+# إصلاح صلاحيات مجلد n8n
+RUN mkdir -p /home/node/.n8n && chown -R node:node /home/node/.n8n
+
+USER node
+
+# المنفذ الافتراضي
 EXPOSE 5678
 
-# Start n8n
-CMD [ "n8n", "start" ]
+# تشغيل n8n باستخدام tini
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["n8n", "start"]
