@@ -1,14 +1,18 @@
-FROM n8nio/n8n:latest
+# 🧱 الأساس: Node رسمي
+FROM node:20-alpine
 
-ENV GENERIC_TIMEZONE=Asia/Riyadh
-ENV TZ=Asia/Riyadh
+# إعداد مجلد العمل
+WORKDIR /app
 
-USER root
-RUN mkdir -p /home/node/.n8n && chown -R node:node /home/node/.n8n
+# نسخ الملفات
+COPY package.json ./
+COPY app.js ./
 
-USER node
+# تثبيت التبعيات
+RUN npm install
 
+# المنفذ
 EXPOSE 5678
 
-ENTRYPOINT ["n8n"]
-CMD ["start"]
+# تشغيل التطبيق
+CMD ["node", "app.js"]
